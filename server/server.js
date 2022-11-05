@@ -7,6 +7,9 @@ const shiftList = JSON.parse(fs.readFileSync('./server/shift_list.json', 'utf8')
 const nurseList = JSON.parse(fs.readFileSync('./server/nurse_list.json', 'utf8'));
 
 const app = express();
+//added to be able to parse body
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 /**
  * Returns a JSON list of the shifts in the facility
@@ -44,6 +47,7 @@ app.get('/nurses', (req, res) => {
 app.put('/shifts/:shiftID', (req, res) => {
   const shiftID = req.params.shiftID;
   const nurseID = req.body.nurseID;
+
   console.info(`Attempting to save shift ${shiftID} with nurse ${nurseID} assigned to it.`);
   if (Math.random() > chanceOfFailure) {
     res.status(200).send({
